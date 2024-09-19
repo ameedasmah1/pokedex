@@ -2,6 +2,8 @@
 
 import { usePokemonsByGeneration } from "@/hooks/usePokemonByGeneration";
 import { usePokemonGeneration } from "@/hooks/usePokemonGeneration";
+import { Pokemon } from "@/services/types";
+import Link from "next/link";
 import { useState } from "react";
 
 const PokemonListClient = ({
@@ -12,7 +14,8 @@ const PokemonListClient = ({
   const [generation, setGeneration] = useState(defaultGeneration);
   const { data: pokemons } = usePokemonsByGeneration({ generation });
   const { data: generations } = usePokemonGeneration();
-  
+
+  console.log(pokemons);
   return (
     <div>
       <div className="mt-8">
@@ -32,7 +35,24 @@ const PokemonListClient = ({
           ))}
         </select>
       </div>
-      {JSON.stringify(pokemons)}
+      <div className=" flex flex-row gap-x-8">
+        <div className="mt-4">
+          <h2 className="text-xl font-bold">Pokémon List based by Moves:</h2>
+          <ul className="list-disc list-inside mt-2">
+            {pokemons?.moves?.length > 0 ? (
+              pokemons.moves.map((pokemon: Pokemon) => (
+                <li key={pokemon.url} className="text-lg">
+                  <Link href={`/${pokemon.name}`}>
+                    {pokemon.name}
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li>No Pokémon found.</li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

@@ -34,6 +34,7 @@ export const getPokemonByGenerations = async ({
 
 export const getPokemonById = async (pokemonId: string) => {
   try {
+    console.log('xxx')
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
     );
