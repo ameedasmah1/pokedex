@@ -1,24 +1,22 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/lib/getQueryClient";
-import Pokemon from "./components/Pokemon";
+import PokemonGenerations from "../components/pokemon-generations";
+import { getPokemonbyGenerationsQueryOptions } from "@/queryOptions/pockemon";
+import { getPokemonByGenerations } from "@/services/api";
 
 export default async function Home() {
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ["Pokemon"],
-    queryFn: () =>
-      fetch("https://pokeapi.co/api/v2/pokemon/ditto").then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      }),
+  const pockemon_generation = queryClient.prefetchQuery({
+    queryKey: getPokemonbyGenerationsQueryOptions().queryKey,
+    queryFn: () => getPokemonByGenerations(),
   });
-
+  await Promise.all([pockemon_generation]);
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Pokemon />
+      <div className="container max-w-7xl mx-auto my-16">
+        <PokemonGenerations />
+      </div>
     </HydrationBoundary>
   );
 }
