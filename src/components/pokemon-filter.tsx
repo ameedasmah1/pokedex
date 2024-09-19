@@ -1,19 +1,13 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { getPokemonByGenerations } from "@/services/api";
-import { GenerationData } from "@/services/types";
-import { getPokemonbyGenerationsQueryOptions } from "@/queryOptions/pockemon";
+import { usePokemonGeneration } from "@/hooks/usePokemonGeneration";
 
 type PokemonFilterProps = {
   setGeneration: (gen: string) => void;
 };
 
 const PokemonFilter = ({ setGeneration }: PokemonFilterProps) => {
-  const { data, error, isLoading } = useQuery<GenerationData, Error>({
-    ...getPokemonbyGenerationsQueryOptions(),
-    queryFn: getPokemonByGenerations,
-  });
+  const { data, error, isLoading } = usePokemonGeneration()
 
   if (isLoading) return <div>Loading generations...</div>;
   if (error) return <div>Error: {error.message}</div>;
